@@ -1,0 +1,58 @@
+name: Ping Software Scale Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target (URL for L7 or IP:Port for L4)'
+        required: true
+        default: 'https://example.com'
+      method:
+        description: 'Ping method'
+        required: true
+        default: 'GET'
+      layer:
+        description: 'Layer type'
+        required: true
+        type: choice
+        options:
+          - L7
+          - L4
+      threads:
+        description: 'Number of threads'
+        required: true
+        default: '100'
+      duration:
+        description: 'Test duration (seconds)'
+        required: true
+        default: '30'
+
+jobs:
+  ping-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        job: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run L7 Ping Test
+        if: github.event.inputs.layer == 'L7'
+        run: |
+          python3 start.py ${{ github.event.inputs.method }} '${{ github.event.inputs.target }}' 0 ${{ github.event.inputs.threads }} "http.txt" 1 ${{ github.event.inputs.duration }}
+
+      - name: Run L4 Ping Test
+        if: github.event.inputs.layer == 'L4'
+        run: |
+          python3 start.py ${{ github.event.inputs.method }} ${{ github.event.inputs.target }} ${{ github.event.inputs.threads }} ${{ github.event.inputs.duration }}
