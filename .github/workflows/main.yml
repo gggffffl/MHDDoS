@@ -26,6 +26,10 @@ on:
         description: 'Test duration (seconds)'
         required: true
         default: '30'
+      rpc:
+        description: 'rpc'
+        required: false
+        default: '17'
 
 jobs:
   ping-tests:
@@ -50,7 +54,7 @@ jobs:
       - name: Run L7 Ping Test
         if: github.event.inputs.layer == 'L7'
         run: |
-          python3 start.py ${{ github.event.inputs.method }} '${{ github.event.inputs.target }}' 0 ${{ github.event.inputs.threads }} "http.txt" 1 ${{ github.event.inputs.duration }}
+          python3 start.py ${{ github.event.inputs.method }} '${{ github.event.inputs.target }}' 0 ${{ github.event.inputs.threads }} "http.txt" ${{ github.event.inputs.rpc }} ${{ github.event.inputs.duration }}
 
       - name: Run L4 Ping Test
         if: github.event.inputs.layer == 'L4'
