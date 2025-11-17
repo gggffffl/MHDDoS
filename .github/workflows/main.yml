@@ -6,26 +6,26 @@ on:
       target:
         description: 'Target (URL for L7 or IP:Port for L4)'
         required: true
-        default: 'https://example.com'
+        default: ''
       method:
         description: 'Ping method'
         required: true
-        default: 'GET'
+        default: 'UDP'
       layer:
         description: 'Layer type'
         required: true
         type: choice
         options:
-          - L7
           - L4
+          - L7
       threads:
         description: 'Number of threads'
         required: true
-        default: '100'
+        default: '446'
       duration:
         description: 'Test duration (seconds)'
         required: true
-        default: '30'
+        default: '200'
       rpc:
         description: 'rpc'
         required: false
